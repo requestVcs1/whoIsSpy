@@ -11,12 +11,20 @@
         {{ item.text }}
       </view>
     </view>
-    <view class="input-box">
-      <input
-        v-model="roomCode"
-        placeholder="请输入房间号"
-        placeholder-class="input-placeholder"
-      />
+    <view v-if="inputVisible" class="input-box">
+      <view class="content">
+        <input
+          v-model="roomCode"
+          placeholder="请输入房间号"
+          placeholder-class="input-placeholder"
+          class="el-input"
+          type="number"
+        />
+        <view class="submit" :class="{ disabled: !roomCode }" @click="submit"
+          >好了</view
+        >
+      </view>
+      <view @click="close" class="mask"></view>
     </view>
   </view>
 </template>
@@ -30,12 +38,14 @@ export default {
   },
   data() {
     return {
+      inputVisible: false,
       roomCode: '',
+      userInfo: {},
       menuList: [
         {
           id: 0,
           text: '现在开始',
-          type:"create"
+          type: "create"
         },
         {
           id: 1,
@@ -49,35 +59,35 @@ export default {
 
   },
   methods: {
+    close() {
+      this.inputVisible = false
+    },
     handler(type) {
       switch (type) {
         case 'create':
           this.playNow()
           break;
         case 'join':
-            this.joinRoom()
-            break;
+          this.joinRoom()
+          break;
       }
     },
     // 创建房间
-    playNow() {
-      utils.getUserInfo().then(res => {
-        const userInfo = res.userInfo
-        uni.setStorageSync('userInfo', userInfo)
-        this.createRoom(userInfo)
+    async playNow() {
+      await this.getUserInfo()
+      this.createRoom(this.userInfo)
+    },
+    getUserInfo() {
+      return new Promise((resolve) => {
+        utils.getUserInfo().then(userInfo => {
+          this.userInfo = userInfo
+          resolve()
+        })
       })
     },
-    joinRoom() {
-      const data = {
-        name: userInfo.nickName,
-        members: [
-          {
-            nickName: userInfo.nickName,
-            avatarUrl: userInfo.avatarUrl
-          }
-        ]
-      }
-      this.$callFun('createRoom', data)
+    async joinRoom() {
+      await this.getUserInfo()
+      this.inputVisible = true
     },
     createRoom(userInfo) {
       const data = {
@@ -90,6 +100,17 @@ export default {
         ]
       }
       this.$callFun('createRoom', data)
+    },
+    submit() {
+      if (this.roomCode) {
+        const data = {
+          nickName: this.userInfo.nickName,
+          avatarUrl: this.userInfo.avatarUrl,
+          id: this.roomCode
+        }
+        this.$callFun('joinRoom', data)
+        this.close()
+      }
     }
   }
 }
@@ -123,6 +144,52 @@ export default {
     border-radius: $uni-border-radius-base;
     border: 1rpx solid $custom-border-color;
     text-align: center;
+  }
+}
+.input-box {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .content {
+    width: 500rpx;
+    height: 300rpx;
+    background: #bce2d3;
+    border-radius: $uni-border-radius-lg;
+    z-index: 99;
+    padding: 15rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  .el-input {
+    border: 1rpx solid $custom-border-color;
+    border-radius: $uni-border-radius-base;
+    width: 80%;
+    height: 80rpx;
+    font-size: $uni-font-size-base;
+    padding: 0 20rpx;
+  }
+  .submit {
+    margin-top: 60rpx;
+    padding: 15rpx 30rpx;
+    background: #e2ec52;
+    border-radius: $uni-border-radius-lg;
+    color: #333;
   }
 }
 </style>

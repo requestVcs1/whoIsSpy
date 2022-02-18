@@ -15,12 +15,19 @@ export default {
   },
   getUserInfo() {
     return new Promise(resolve => {
-      wx.getUserProfile({
-        desc: '用于展示用户头像昵称',
-        success: res => {
-          resolve(res)
-        },
-      })
+      const userInfo = uni.getStorageSync('userInfo')
+      if (userInfo) {
+        console.log(userInfo)
+        resolve(userInfo)
+      } else {
+        wx.getUserProfile({
+          desc: '用于展示用户头像昵称',
+          success: res => {
+            uni.setStorageSync('userInfo', userInfo)
+            resolve(res)
+          },
+        })
+      }
     })
   },
 }

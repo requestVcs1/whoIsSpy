@@ -20,7 +20,7 @@ exports.main = async (event, context) => {
           members: data.members,
           owner: wxContext.OPENID,
           createTime: getCurrentDate(),
-          _id: NUM += 1
+          _id: (NUM += 1),
         },
       })
       .then(res => {
@@ -53,12 +53,12 @@ exports.main = async (event, context) => {
   app.router('joinRoom', async ctx => {
     const { _req } = ctx
     const data = _req.event
-    const data = await db.collection('room').where({
-      _id: data.id
+    const result =  db.collection('room').where({
+      _id: data.id,
     })
     ctx.body = {
       message: '测试joinRoom',
-      data
+      data: result,
     }
   })
   return app.serve()
