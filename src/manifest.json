@@ -1,6 +1,6 @@
 {
 	"name": "",
-	"appid": "",
+	"appid": "wx21327a19dfa7b31b",
 	"description": "",
 	"versionName": "1.0.0",
 	"versionCode": "100",
@@ -54,9 +54,12 @@
 
 	},
 	"mp-weixin": { /* 微信小程序特有相关 */
-		"appid": "",
+		"appid": "wx21327a19dfa7b31b",
+		"cloudfunctionRoot" : "/static/cloudfunctions/",
+		"cloudfunctionTemplateRoot": "/static/cloudfunctions/",
 		"setting": {
-			"urlCheck": false
+			"urlCheck": false,
+			"es6": true
 		},
 		"usingComponents": true
 	},
