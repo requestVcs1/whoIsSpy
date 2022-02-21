@@ -101,15 +101,18 @@ export default {
       }
       this.$callFun('createRoom', data)
     },
-    submit() {
+    async submit() {
       if (this.roomCode) {
         const data = {
           nickName: this.userInfo.nickName,
           avatarUrl: this.userInfo.avatarUrl,
           id: this.roomCode
         }
-        this.$callFun('joinRoom', data)
         this.close()
+        await this.$callFun('joinRoom', data)
+        uni.navigateTo({
+          url: `/packageA/playGame/playGame?id=${this.roomCode}`
+        })
       }
     }
   }
