@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "custom": "vue-cli-service build --target wc --name custom '/src/components/custom/*.vue'",
     "serve": "npm run dev:h5",
     "build": "npm run build:h5",
     "build:app-plus": "cross-env NODE_ENV=production UNI_PLATFORM=app-plus vue-cli-service uni-build",
@@ -67,6 +68,7 @@
     "core-js": "^3.6.5",
     "dayjs": "^1.10.7",
     "flyio": "^0.6.2",
+    "html-withimg-loader": "^0.1.16",
     "regenerator-runtime": "^0.12.1",
     "vue": "^2.6.11",
     "vuex": "^3.2.0",
@@ -94,7 +96,9 @@
     "miniprogram-api-typings": "*",
     "node-sass": "^4.14.1",
     "postcss-comment": "^2.0.0",
-    "vue-template-compiler": "^2.6.11"
+    "url-loader": "^4.1.1",
+    "vue-template-compiler": "^2.6.11",
+    "webpack-dev-server": "^4.7.4"
   },
   "browserslist": [
     "Android >= 4.4",

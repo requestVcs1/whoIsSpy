@@ -37,6 +37,7 @@ exports.main = async (event, context) => {
     const { _req } = ctx
     const data = _req.event
     const result = await db.collection('room').doc(+data.id).get()
+    console.log(result.data)
     ctx.body = resultReturn({
       message: '获取房间信息成功',
       data: result.data,
